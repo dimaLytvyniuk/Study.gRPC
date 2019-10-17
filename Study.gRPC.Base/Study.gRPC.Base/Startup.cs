@@ -17,6 +17,16 @@ namespace Study.gRPC.Base
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddGrpc();
+            
+            services.AddCors(options =>
+            {
+                options.AddPolicy(
+                    "CorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .WithExposedHeaders("Authorization"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -28,6 +38,8 @@ namespace Study.gRPC.Base
             }
 
             app.UseRouting();
+            
+            app.UseCors("CorsPolicy");
 
             app.UseEndpoints(endpoints =>
             {
